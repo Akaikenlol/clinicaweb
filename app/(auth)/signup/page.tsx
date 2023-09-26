@@ -72,15 +72,18 @@ const SingUpPage = () => {
 			</div>
 			<Separator className="my-5" />
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
-					<div className="grid grid-cols-2 gap-8">
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="w-full space-y-8"
+				>
+					<div className="grid grid-cols-2 gap-8 p-5">
 						<FormField
 							control={form.control}
 							name="username"
 							render={({ field }) => (
 								<FormItem className="col-span-2">
-									<FormLabel>Username</FormLabel>
-									<FormControl>
+									<FormLabel className="">Username</FormLabel>
+									<FormControl className="">
 										<Input placeholder="Username or Email" {...field} />
 									</FormControl>
 									<FormMessage />
@@ -122,7 +125,8 @@ const SingUpPage = () => {
 									<Select
 										onValueChange={field.onChange}
 										value={field.value}
-										defaultValue={field.value}>
+										defaultValue={field.value}
+									>
 										<FormControl>
 											<SelectTrigger>
 												<SelectValue

@@ -26,6 +26,9 @@ import {
 import Heading from "@/components/ui/header";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { pb } from "@/helper";
+import { Router } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
 	username: z.string().min(1),
@@ -44,6 +47,7 @@ const SingUpPage = () => {
 	const setIsLogIn = useAuthModal((state) => state.setIsLogIn);
 	const isLogIn = useAuthModal((state) => state.isLogIn);
 	const [role, setRole] = useState("");
+	const router = useRouter();
 
 	const form = useForm<LoginFormValue>({
 		resolver: zodResolver(formSchema),
@@ -54,9 +58,13 @@ const SingUpPage = () => {
 	});
 
 	const onSubmit = async (data: LoginFormValue) => {
-		console.log(data);
-		setRole("GGez");
-		console.log(role);
+		const res = await pb
+			.collection("users")
+			.authWithPassword(data.username, data.password, {}, { expand: "role" });
+		console.log(res);
+		const getRole = await pb.collection("role").getOne(res.record.role);
+		console.log(getRole);
+		router.push(`/${res?.record?.expand?.role.role}/${res.record.id}`);
 	};
 
 	return (
@@ -66,7 +74,10 @@ const SingUpPage = () => {
 			</div>
 			<Separator className="my-5" />
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="w-full space-y-8"
+				>
 					<div className="grid grid-cols-2 gap-8">
 						<FormField
 							control={form.control}
@@ -75,11 +86,7 @@ const SingUpPage = () => {
 								<FormItem className="col-span-2">
 									<FormLabel>Username</FormLabel>
 									<FormControl>
-										<Input
-											placeholder="Username or Email"
-											{...field}
-											onChange={(e) => setRole(e.target.value)}
-										/>
+										<Input placeholder="Username or Email" {...field} />
 									</FormControl>
 									<FormMessage />
 								</FormItem>
