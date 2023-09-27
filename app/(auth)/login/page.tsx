@@ -29,6 +29,7 @@ import Link from "next/link";
 import { pb } from "@/helper";
 import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { usePocket } from "@/providers/pocket-provider";
 
 const formSchema = z.object({
 	username: z.string().min(1),
@@ -44,9 +45,8 @@ interface LoginFormProps {
 const roles = ["Doctor", "Nurse"];
 
 const SingUpPage = () => {
-	const setIsLogIn = useAuthModal((state) => state.setIsLogIn);
-	const isLogIn = useAuthModal((state) => state.isLogIn);
-	const [role, setRole] = useState("");
+	//@ts-ignore
+	const { login } = usePocket();
 	const router = useRouter();
 
 	const form = useForm<LoginFormValue>({
@@ -58,13 +58,13 @@ const SingUpPage = () => {
 	});
 
 	const onSubmit = async (data: LoginFormValue) => {
-		const res = await pb
-			.collection("users")
-			.authWithPassword(data.username, data.password, {}, { expand: "role" });
-		console.log(res);
-		const getRole = await pb.collection("role").getOne(res.record.role);
-		console.log(getRole);
-		router.push(`/${res?.record?.expand?.role.role}/${res.record.id}`);
+		try {
+			const res = await login(data.username, data.password, "role");
+
+			router.push(`/${res.record.expand?.role.role}/${pb.authStore.model?.id}`);
+		} catch (error) {
+			console.log(error);
+		}
 	};
 
 	return (
@@ -74,11 +74,8 @@ const SingUpPage = () => {
 			</div>
 			<Separator className="my-5" />
 			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="w-full space-y-8"
-				>
-					<div className="grid grid-cols-2 gap-8">
+				<form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
+					<div className="grid grid-cols-2 gap-8 p-5">
 						<FormField
 							control={form.control}
 							name="username"
