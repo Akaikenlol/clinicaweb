@@ -17,5 +17,5 @@ export default function SetupPage() {
 		router.push(`/${user.expand.role.role}/${user.id}`);
 	}
 
-	return <></>;
+	return <div></div>;
 }
