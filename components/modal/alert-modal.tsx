@@ -21,8 +21,8 @@ export default function AlertModal({
 
 	return (
 		<Modal
-			title="Are you sure?"
-			description="This action cannot be undone."
+			title="Log Out"
+			description="Are you sure you want to logout?"
 			isOpen={isOpen}
 			onClose={onClose}>
 			<div className="flex items-center justify-end w-full pt-6 space-x-2">
