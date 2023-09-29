@@ -1,8 +1,14 @@
 "use client";
 
-import { ResponsiveTimeRange } from "@nivo/calendar";
+// import { ResponsiveTimeRange } from "@nivo/calendar";
 import { data } from "./data";
 import { format, subMonths } from "date-fns";
+import dynamic from "next/dynamic";
+
+const ResponsiveTimeRange = dynamic(
+	() => import("@nivo/calendar").then((m) => m.ResponsiveTimeRange),
+	{ ssr: false }
+);
 
 export const CalendarChart = () => {
 	const today = format(new Date(), "yyyy-MM-dd");
@@ -16,7 +22,7 @@ export const CalendarChart = () => {
 			from={lastSixMonth}
 			to={today}
 			emptyColor="#eeeeee"
-			colors={["#61cdbb", "#97e3d5", "#e8c1a0", "#f47560"]}
+			colors={["#e4e5f0", "#cdcde5", "#b2b1d4", "#9e9ac7"]}
 			margin={{ top: 40, right: 40, bottom: 100, left: 40 }}
 			dayBorderWidth={2}
 			dayBorderColor="#ffffff"

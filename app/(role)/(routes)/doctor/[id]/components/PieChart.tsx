@@ -1,7 +1,13 @@
 "use client";
 
-import { ResponsivePie } from "@nivo/pie";
+// import { ResponsivePie } from "@nivo/pie";
 import { pieData } from "./data";
+import dynamic from "next/dynamic";
+
+const ResponsivePie = dynamic(
+	() => import("@nivo/pie").then((m) => m.ResponsivePie),
+	{ ssr: false }
+);
 
 export const PieChart = () => {
 	return (
@@ -13,6 +19,7 @@ export const PieChart = () => {
 			cornerRadius={3}
 			activeOuterRadiusOffset={8}
 			borderWidth={1}
+			colors={{ scheme: "purples" }}
 			borderColor={{
 				from: "color",
 				modifiers: [["darker", 0.2]],
