@@ -42,8 +42,6 @@ interface LoginFormProps {
 	initialData: LoginProps | null;
 }
 
-const roles = ["Doctor", "Nurse"];
-
 const SingUpPage = () => {
 	//@ts-ignore
 	const { login } = usePocket();
@@ -61,6 +59,8 @@ const SingUpPage = () => {
 		try {
 			const res = await login(data.username, data.password, "role");
 
+			console.log(res);
+
 			router.push(`/${res.record.expand?.role.role}/${pb.authStore.model?.id}`);
 		} catch (error) {
 			console.log(error);
@@ -74,7 +74,10 @@ const SingUpPage = () => {
 			</div>
 			<Separator className="my-5" />
 			<Form {...form}>
-				<form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-8">
+				<form
+					onSubmit={form.handleSubmit(onSubmit)}
+					className="w-full space-y-8"
+				>
 					<div className="grid grid-cols-2 gap-8 p-5">
 						<FormField
 							control={form.control}
